@@ -492,5 +492,293 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // ========================================
+    // BACKEND INTEGRATION - MOVIES CRUD
+    // ========================================
+    
+    // Edit Movie Function
+    window.editMovie = function(id) {
+        fetch(`php/api.php?type=movies&action=get_one&id=${id}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const movie = data.data;
+                    document.getElementById('editMovieId').value = movie.id;
+                    document.getElementById('editMovieTitle').value = movie.title;
+                    document.getElementById('editMovieYear').value = movie.release_year;
+                    document.getElementById('editMovieDuration').value = movie.duration_minutes;
+                    document.getElementById('editMovieRating').value = movie.rating;
+                    document.getElementById('editMovieTagline').value = movie.tagline;
+                    document.getElementById('editMoviePoster').value = movie.poster_image;
+                    document.getElementById('editMovieDescription').value = movie.description;
+                    
+                    document.getElementById('editMovieModal').classList.remove('hidden');
+                } else {
+                    showErrorToast('Failed to load movie data');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showErrorToast('Error loading movie');
+            });
+    };
+
+    // Delete Movie Function
+    window.deleteMovie = function(id) {
+        if (confirm('Are you sure you want to delete this movie?')) {
+            fetch(`php/api.php?type=movies&action=delete&id=${id}`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSuccessToast('Movie deleted successfully');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showErrorToast('Failed to delete movie');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showErrorToast('Error deleting movie');
+            });
+        }
+    };
+
+    // Add Movie Form Submission
+    const addMovieForm = document.getElementById('addMovieForm');
+    if (addMovieForm) {
+        addMovieForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                title: document.getElementById('movieTitle').value,
+                release_year: parseInt(document.getElementById('movieYear').value),
+                tagline: document.getElementById('movieTagline').value,
+                duration_minutes: parseInt(document.getElementById('movieDuration').value) || 0,
+                rating: parseFloat(document.getElementById('movieRating').value) || 0,
+                poster_image: document.getElementById('moviePoster').value,
+                description: document.getElementById('movieDescription').value
+            };
+
+            fetch('php/api.php?type=movies&action=create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSuccessToast('Movie added successfully');
+                    document.getElementById('addMovieModal').classList.add('hidden');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showErrorToast('Failed to add movie');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showErrorToast('Error adding movie');
+            });
+        });
+    }
+
+    // Edit Movie Form Submission
+    const editMovieForm = document.getElementById('editMovieForm');
+    if (editMovieForm) {
+        editMovieForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                id: parseInt(document.getElementById('editMovieId').value),
+                title: document.getElementById('editMovieTitle').value,
+                release_year: parseInt(document.getElementById('editMovieYear').value),
+                tagline: document.getElementById('editMovieTagline').value,
+                duration_minutes: parseInt(document.getElementById('editMovieDuration').value) || 0,
+                rating: parseFloat(document.getElementById('editMovieRating').value) || 0,
+                poster_image: document.getElementById('editMoviePoster').value,
+                description: document.getElementById('editMovieDescription').value
+            };
+
+            fetch('php/api.php?type=movies&action=update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSuccessToast('Movie updated successfully');
+                    document.getElementById('editMovieModal').classList.add('hidden');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showErrorToast('Failed to update movie');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showErrorToast('Error updating movie');
+            });
+        });
+    }
+
+    // ========================================
+    // BACKEND INTEGRATION - CHARACTERS CRUD
+    // ========================================
+    
+    // Edit Character Function
+    window.editCharacter = function(id) {
+        fetch(`php/api.php?type=characters&action=get_one&id=${id}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const char = data.data;
+                    document.getElementById('editCharacterId').value = char.id;
+                    document.getElementById('editCharName').value = char.name;
+                    document.getElementById('editCharRole').value = char.role;
+                    document.getElementById('editCharQuote').value = char.quote;
+                    document.getElementById('editCharAvatar').value = char.avatar_image;
+                    document.getElementById('editCharDescription').value = char.description;
+                    document.getElementById('editCharType').value = char.character_type;
+                    
+                    document.getElementById('editCharacterModal').classList.remove('hidden');
+                } else {
+                    showErrorToast('Failed to load character data');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showErrorToast('Error loading character');
+            });
+    };
+
+    // Delete Character Function
+    window.deleteCharacter = function(id) {
+        if (confirm('Are you sure you want to delete this character?')) {
+            fetch(`php/api.php?type=characters&action=delete&id=${id}`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSuccessToast('Character deleted successfully');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showErrorToast('Failed to delete character');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showErrorToast('Error deleting character');
+            });
+        }
+    };
+
+    // Add Character Form Submission
+    const addCharacterForm = document.getElementById('addCharacterForm');
+    if (addCharacterForm) {
+        addCharacterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('charName').value,
+                role: document.getElementById('charRole').value,
+                quote: document.getElementById('charQuote').value,
+                avatar_image: document.getElementById('charAvatar').value,
+                description: document.getElementById('charDescription').value,
+                character_type: document.getElementById('charType').value
+            };
+
+            fetch('php/api.php?type=characters&action=create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSuccessToast('Character added successfully');
+                    document.getElementById('addCharacterModal').classList.add('hidden');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showErrorToast('Failed to add character');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showErrorToast('Error adding character');
+            });
+        });
+    }
+
+    // Edit Character Form Submission
+    const editCharacterForm = document.getElementById('editCharacterForm');
+    if (editCharacterForm) {
+        editCharacterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                id: parseInt(document.getElementById('editCharacterId').value),
+                name: document.getElementById('editCharName').value,
+                role: document.getElementById('editCharRole').value,
+                quote: document.getElementById('editCharQuote').value,
+                avatar_image: document.getElementById('editCharAvatar').value,
+                description: document.getElementById('editCharDescription').value,
+                character_type: document.getElementById('editCharType').value
+            };
+
+            fetch('php/api.php?type=characters&action=update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSuccessToast('Character updated successfully');
+                    document.getElementById('editCharacterModal').classList.add('hidden');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showErrorToast('Failed to update character');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showErrorToast('Error updating character');
+            });
+        });
+    }
+
+    // ========================================
+    // TOAST NOTIFICATIONS
+    // ========================================
+    function showSuccessToast(message) {
+        const toast = document.getElementById('successToast');
+        const toastMessage = document.getElementById('successMessage');
+        toastMessage.textContent = message;
+        toast.classList.remove('hidden');
+        setTimeout(() => {
+            toast.classList.add('hidden');
+        }, 3000);
+    }
+
+    function showErrorToast(message) {
+        const toast = document.getElementById('errorToast');
+        const toastMessage = document.getElementById('errorMessage');
+        toastMessage.textContent = message;
+        toast.classList.remove('hidden');
+        setTimeout(() => {
+            toast.classList.add('hidden');
+        }, 3000);
+    }
+
     console.log('Toy Story Admin Panel initialized successfully!');
 });
