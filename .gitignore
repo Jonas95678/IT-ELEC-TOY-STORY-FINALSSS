@@ -1,0 +1,53 @@
+```
+# Compiled and build artifacts
+*.pyc
+__pycache__/
+*.o
+*.obj
+*.log
+*.tmp
+*.swp
+
+# Dependencies
+vendor/
+node_modules/
+
+# Environment
+.env
+.env.local
+.env.*
+
+# Editors
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# PHP specific
+*.php~
+*.bak
+
+# Database
+*.sql.bak
+*.db-journal
+
+# Coverage reports
+coverage/
+htmlcov/
+*.coverage
+
+# Distribution / packaging
+dist/
+build/
+*.tar.gz
+*.zip
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+```
